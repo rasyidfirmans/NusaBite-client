@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import com.pab.nusabite.ui.theme.NusaBiteTheme
 import com.pab.nusabite.utils.dataclass.Navigation
 import com.pab.nusabite.views.CartView
+import com.pab.nusabite.views.OrderView
 import com.pab.nusabite.views.Profile
 
 val navigationItems = listOf(
@@ -123,6 +124,6 @@ fun Screen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        CartView()
+        OrderView()
     }
 }
