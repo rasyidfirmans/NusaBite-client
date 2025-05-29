@@ -56,7 +56,7 @@ fun DetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(bottom = 90.dp) // padding untuk tombol bawah
+                    .padding(bottom = 90.dp)
             ) {
                 Box(modifier = Modifier.height(300.dp)) {
                     Image(
@@ -66,7 +66,7 @@ fun DetailScreen(
                             .fillMaxSize()
                             .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
                     )
-                    // Tombol kembali
+
                     IconButton(
                         onClick = { navController.popBackStack() },
                         modifier = Modifier
@@ -77,14 +77,12 @@ fun DetailScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
                     }
 
-                    // Text "About This Menu"
                     Text(
                         text = "About This Menu",
                         style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(16.dp)
-                            .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
                             .padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
