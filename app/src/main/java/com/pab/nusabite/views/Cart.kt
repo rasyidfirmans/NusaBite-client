@@ -15,41 +15,41 @@ import com.pab.nusabite.utils.dataclass.CartItem
 
 val CartItems = listOf(
     CartItem(
-        name = "Burger King",
-        price = 15.0,
+        name = "Pempek",
+        price = 13.000,
         quantity = 2,
-        image = R.drawable.burger
+        image = R.drawable.pempek
     ),
     CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
-        quantity = 1,
-        image = R.drawable.burger
+        name = "Ikan Bakar",
+        price = 22.000,
+        quantity = 4,
+        image = R.drawable.ikanbakar
     ),CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
+        name = "Sate Ayam",
+        price = 15.000,
         quantity = 1,
-        image = R.drawable.burger
+        image = R.drawable.sateayam2
     ),CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
+        name = "Es Cendol",
+        price = 8.000,
         quantity = 1,
-        image = R.drawable.burger
+        image = R.drawable.escendol2
     ),CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
+        name = "Iga Bakar",
+        price = 25.000,
         quantity = 1,
-        image = R.drawable.burger
+        image = R.drawable.igabakar
     ),CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
-        quantity = 1,
-        image = R.drawable.burger
+        name = "Ayam Goreng",
+        price = 18.000,
+        quantity = 3,
+        image = R.drawable.ayamgoreng
     ),CartItem(
-        name = "Pizza Hut",
-        price = 20.0,
-        quantity = 1,
-        image = R.drawable.burger
+        name = "Es Melon Selasih",
+        price = 8.000,
+        quantity = 2,
+        image = R.drawable.esmelonselasih2
     ),
 )
 

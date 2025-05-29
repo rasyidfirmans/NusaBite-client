@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -50,7 +52,6 @@ import com.pab.nusabite.utils.models.MenuViewModel
 fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
     val menuItems by viewModel.menus.collectAsState()
 
-    // List of categories and their icons
     val categories = listOf(
         "Makanan" to R.drawable.icons_food,
         "Minuman" to R.drawable.icons_lemonade,
@@ -80,6 +81,7 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
                     .fillMaxWidth()
                     .height(250.dp)
                     .statusBarsPadding()
+                    .clip(MaterialTheme.shapes.medium)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.header),
@@ -93,17 +95,6 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
                         .padding(16.dp),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
                     Text(
                         text = "Provide the best\nfood for you",
                         color = Color.White,
@@ -119,7 +110,7 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -140,8 +131,8 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
         // Category List
         item(span = { GridItemSpan(maxCurrentLineSpan) }) {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 5.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(categories) { (name, iconRes) ->
