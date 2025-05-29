@@ -118,7 +118,7 @@ class MenuViewModel : ViewModel() {
                 14,
                 "Nasi Goreng",
                 12000,
-                R.drawable.nasgor,
+                R.drawable.nasgor2,
                 4.9,
                 "Nasi goreng spesial dengan telur dan ayam suwir."
             ),
