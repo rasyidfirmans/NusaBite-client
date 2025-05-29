@@ -49,6 +49,7 @@ import com.pab.nusabite.views.CartView
 import com.pab.nusabite.views.HistoryView
 import com.pab.nusabite.views.OrderView
 import com.pab.nusabite.views.Profile
+import com.pab.nusabite.views.orders
 
 val navigationItems = listOf(
     Navigation(title = "Order", route = ORDER, icon = arrayOf(Icons.Outlined.Shop, Icons.Filled.Shop)),
