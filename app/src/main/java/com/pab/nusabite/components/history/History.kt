@@ -1,4 +1,4 @@
-package com.pab.nusabite.ui.component
+package com.pab.nusabite.components.history
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pab.nusabite.ui.screen.Order
-import com.pab.nusabite.ui.screen.OrderItem
-import com.pab.nusabite.ui.screen.OrderStatus
+import com.pab.nusabite.views.Order
+import com.pab.nusabite.views.OrderItem
+import com.pab.nusabite.views.OrderStatus
 
 @Composable
 fun History(orders: List<Order>){
@@ -59,4 +59,3 @@ fun PreviewHistoryContent() {
     )
     History(sampleOrders)
 }
-

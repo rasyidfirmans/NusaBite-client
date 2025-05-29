@@ -1,4 +1,4 @@
-package com.pab.nusabite.ui.screen
+package com.pab.nusabite.views
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
-import com.pab.nusabite.ui.component.History
+import com.pab.nusabite.components.history.History
 
 // Dummy colors
 val Orange = Color(0xFFFFE8C00)
@@ -41,26 +41,30 @@ fun HistoryScreen( onBackClick: () -> Unit = {}) {
         Order(1, "20 Mei 2025", "19:30",
             listOf(
                 OrderItem("Nasi Goreng", 1, "15.000"),
-                OrderItem("Es Teh", 2, "5.000")),
+                OrderItem("Es Teh", 2, "5.000")
+            ),
             "25.000",
             OrderStatus.complete
         ),
         Order(2, "21 Mei 2025", "21:30",
             listOf(
                 OrderItem("Nasi Goreng", 1, "15.000"),
-                OrderItem("Es Teh", 2, "5.000")),
+                OrderItem("Es Teh", 2, "5.000")
+            ),
             "25.000",
             OrderStatus.process
         ),
         Order(3, "21 Mei 2025", "22:30",
             listOf(
-                OrderItem("Nasi Goreng", 1, "15.000")),
+                OrderItem("Nasi Goreng", 1, "15.000")
+            ),
             "15.000",
             OrderStatus.process
         ),
         Order(4, "21 Mei 2025", "22:30",
             listOf(
-                OrderItem("Nasi Goreng", 1, "15.000")),
+                OrderItem("Nasi Goreng", 1, "15.000")
+            ),
             "15.000",
             OrderStatus.process
         )

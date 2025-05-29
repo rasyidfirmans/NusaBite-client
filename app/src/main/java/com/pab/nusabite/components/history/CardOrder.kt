@@ -1,4 +1,4 @@
-package com.pab.nusabite.ui.component
+package com.pab.nusabite.components.history
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,9 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pab.nusabite.ui.screen.Order
-import com.pab.nusabite.ui.screen.OrderItem
-import com.pab.nusabite.ui.screen.OrderStatus
+import com.pab.nusabite.views.Order
+import com.pab.nusabite.views.OrderItem
+import com.pab.nusabite.views.OrderStatus
 
 
 @Composable
@@ -66,7 +66,7 @@ fun CardOrder(order: Order){
 @Preview(showBackground = true)
 @Composable
 fun prevOrderCard(){
-    val order=Order(
+    val order= Order(
         id = 1,
         date = "20 Mei 2025",
         time = "19:30",
