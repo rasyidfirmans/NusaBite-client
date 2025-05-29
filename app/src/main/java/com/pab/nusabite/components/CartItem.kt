@@ -92,7 +92,7 @@ fun CartItemPreview() {
             name = "Burger With Meat",
             price = 15000.0,
             quantity = 2,
-            image = com.pab.nusabite.R.drawable.burger
+            image = com.pab.nusabite.R.drawable.lumpia
         )
     )
 }
