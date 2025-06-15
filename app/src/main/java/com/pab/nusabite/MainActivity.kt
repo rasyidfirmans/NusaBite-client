@@ -35,13 +35,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pab.nusabite.components.order.DetailScreen
 import com.pab.nusabite.ui.theme.NusaBiteTheme
 import com.pab.nusabite.utils.dataclass.Navigation
+import com.pab.nusabite.utils.models.MenuViewModel
 import com.pab.nusabite.utils.route.Route.CART
 import com.pab.nusabite.utils.route.Route.HISTORY
 import com.pab.nusabite.utils.route.Route.ORDER
@@ -64,94 +67,98 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-                setContent {
-                    NusaBiteTheme {
-                        var selectedNavItemIndex by remember {
-                            mutableStateOf(0)
-                        }
-                        val navController = rememberNavController()
+        setContent {
+            NusaBiteTheme {
+                var selectedNavItemIndex by remember { mutableStateOf(0) }
+                val navController = rememberNavController()
+                // ✅ ini yang benar, jangan pakai ViewModel langsung!
 
-                        val lifecycleOwner = LocalLifecycleOwner.current
-                        val currentDestination = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
-                            initialValue = null,
-                            lifecycle = lifecycleOwner.lifecycle
-                        ).value?.destination?.route
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val currentDestination = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
+                    initialValue = null,
+                    lifecycle = lifecycleOwner.lifecycle
+                ).value?.destination?.route
 
-                        selectedNavItemIndex = navigationItems.indexOfFirst { it.route == currentDestination }
+                selectedNavItemIndex = navigationItems.indexOfFirst { it.route == currentDestination }
 
-                        Scaffold(
-                            modifier = Modifier.fillMaxSize(),
-                            bottomBar = {
-                                NavigationBar(
-                                    modifier = Modifier
-                                        .background(Color(255, 255, 255))
-                                        .border(
-                                            width = 1.dp,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NavigationBar(
+                            modifier = Modifier
+                                .background(Color(255, 255, 255))
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                                )
+                        ) {
+                            navigationItems.forEachIndexed { index, navItem ->
+                                NavigationBarItem(
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedIconColor = Color(254, 140, 0),
+                                        unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                        selectedTextColor = Color(254, 140, 0),
+                                        unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                        indicatorColor = Color(254, 140, 0).copy(alpha = 0.2f)
+                                    ),
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (index == selectedNavItemIndex) navItem.icon[1] else navItem.icon[0],
+                                            contentDescription = navItem.title,
                                         )
-                                ) {
-                                    navigationItems.forEachIndexed { index, navItem ->
-                                        NavigationBarItem(
-                                            colors = NavigationBarItemDefaults.colors(
-                                                selectedIconColor = Color(254, 140, 0),
-                                                unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                                selectedTextColor = Color(254, 140, 0),
-                                                unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                                indicatorColor = Color(254, 140, 0).copy(alpha = 0.2f)
-                                            ),
-                                            icon = {
-                                                Icon(
-                                                    imageVector = if (index == selectedNavItemIndex) navItem.icon[1] else navItem.icon[0],
-                                                    contentDescription = navItem.title,
-                                                )
-                                            },
-                                            label = {
-                                                Text(
-                                                    text = navItem.title,
-                                                    fontWeight = if (index == selectedNavItemIndex) FontWeight.Bold else FontWeight.Normal,
-                                                )
-                                            },
-                                            selected = selectedNavItemIndex == index,
-                                            onClick = {
-                                                selectedNavItemIndex = index
-                                                navController.navigate(navItem.route) {
-                                                    popUpTo(navController.graph.startDestinationId) {
-                                                        saveState = true
-                                                    }
-                                                    launchSingleTop = true
-                                                    restoreState = true
-                                                }
-                                            },
+                                    },
+                                    label = {
+                                        Text(
+                                            text = navItem.title,
+                                            fontWeight = if (index == selectedNavItemIndex) FontWeight.Bold else FontWeight.Normal,
                                         )
-                                    }
-                                }
-                            }
-                        ) { innerPadding ->
-                            NavHost(
-                                navController = navController,
-                                startDestination = ORDER,
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(innerPadding)
-                            ) {
-                                composable(route = PROFILE) {
-                                    Profile()
-                                }
-                                composable(route = ORDER) {
-                                    OrderView()
-                                }
-                                composable(route = CART) {
-                                    CartView()
-                                }
-                                composable(route = HISTORY) {
-                                    HistoryView()
-                                }
+                                    },
+                                    selected = selectedNavItemIndex == index,
+                                    onClick = {
+                                        selectedNavItemIndex = index
+                                        navController.navigate(navItem.route) {
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                )
                             }
                         }
                     }
+                ) { innerPadding ->
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = ORDER,
+                        Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        composable(route = PROFILE) { Profile() }
+                        composable(route = ORDER) {
+                            OrderView(navController = navController) // ini sudah benar
+                        }
+                        // ✅ cukup panggil tanpa argumen
+                        composable(route = CART) {
+                            CartView() // ini View yang ambil data dan tampilkan list CartProductItem
+                        }
+                        composable(route = HISTORY) { HistoryView() }
+
+                        // ✅ route ke DetailScreen
+                        composable("detail/{menuId}") { backStackEntry ->
+                            val menuId = backStackEntry.arguments?.getString("menuId")?.toIntOrNull() ?: return@composable
+                            DetailScreen(menuId = menuId, navController = navController) // ✅ biarkan DetailScreen yang ambil viewModel-nya
+                        }
+                    }
                 }
+            }
+        }
     }
 }
+
 
 @Composable
 fun Screen(modifier: Modifier = Modifier) {
