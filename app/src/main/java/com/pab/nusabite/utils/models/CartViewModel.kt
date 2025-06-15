@@ -1,13 +1,11 @@
 package com.pab.nusabite.utils.models
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.pab.nusabite.network.getCart
+import com.pab.nusabite.network.getAllCartItems
 import com.pab.nusabite.utils.dataclass.CartItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.Dispatchers
 
 class CartViewModel : ViewModel() {
     private val _cartProducts = MutableStateFlow<List<CartItem>>(emptyList())
@@ -20,19 +18,16 @@ class CartViewModel : ViewModel() {
     val errorMessage: StateFlow<String?> = _errorMessage
 
     init {
-        fetchCart()
+        fetchCartItems()
     }
 
-    fun fetchCart(cartId: Int = 1) {
+    private fun fetchCartItems () {
         _isLoading.value = true
-
-        // Karena getCart pakai callback, kita tidak bisa langsung pakai suspend di sini.
-        getCart(
-            cartId = cartId,
-            onSuccess = { items ->
-                _cartProducts.value = items
+        getAllCartItems(
+            onSuccess = { response ->
+                _cartProducts.value = response.data.products
                 _isLoading.value = false
-                _errorMessage.value = null
+                Log.d("CartViewModel", "Fetched cart items: ${response.data.products.size} items")
             },
             onError = { error ->
                 _errorMessage.value = error

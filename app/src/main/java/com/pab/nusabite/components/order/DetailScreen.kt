@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.pab.nusabite.network.addToCart
 import com.pab.nusabite.utils.models.MenuViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pab.nusabite.network.AddToCartBody
 
 
 @Composable
@@ -34,6 +35,12 @@ fun DetailScreen(menuId: Int, navController: NavController, viewModel: MenuViewM
     val menu = menus.find { it.id == menuId }
     var quantity by remember { mutableStateOf(1) }
     var addSuccess by remember { mutableStateOf(false) }
+
+    val addToCartBody: AddToCartBody = AddToCartBody(
+        cartId = 1,
+        productId = menuId,
+        quantity = quantity
+    )
 
     menu?.let {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -45,7 +52,7 @@ fun DetailScreen(menuId: Int, navController: NavController, viewModel: MenuViewM
             ) {
                 Box(modifier = Modifier.height(300.dp)) {
                     AsyncImage(
-                        model = it.image,
+                        model = "http://10.0.2.2:8000/${it.image}",
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -133,9 +140,7 @@ fun DetailScreen(menuId: Int, navController: NavController, viewModel: MenuViewM
                 Button(
                     onClick = {
                         addToCart(
-                            cartId = 1,
-                            productId = menuId,
-                            quantity = quantity,
+                            addToCartBody,
                             onSuccess = {
                                 addSuccess = true
                             },

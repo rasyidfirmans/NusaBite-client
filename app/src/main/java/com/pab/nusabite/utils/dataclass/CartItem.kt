@@ -1,6 +1,5 @@
 package com.pab.nusabite.utils.dataclass
 
-
 data class CartItem(
     val id: Int,
     val name: String,
@@ -10,4 +9,3 @@ data class CartItem(
     val description: String? = null,
     val category: String? = null
 )
-

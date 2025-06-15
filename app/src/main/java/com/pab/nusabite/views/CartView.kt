@@ -1,5 +1,6 @@
 package com.pab.nusabite.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +22,9 @@ fun CartView(
     val cartItems by viewModel.cartProducts.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+
+    Log.d("CartView", "Cart items count: ${cartItems.size}")
+    Log.d("CART_ITEMS_DATA", "Cart items: $cartItems")
 
     Column(modifier = Modifier.fillMaxSize()) {
         HeaderView(viewName = "My Cart")

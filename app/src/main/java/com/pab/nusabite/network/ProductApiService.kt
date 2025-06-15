@@ -1,11 +1,14 @@
 package com.pab.nusabite.network
 
+import android.util.Log
+import com.google.gson.annotations.SerializedName
 import com.pab.nusabite.utils.dataclass.ApiProperty
 import com.pab.nusabite.utils.dataclass.Product
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -37,7 +40,8 @@ fun fetchData(
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
-                    onSuccess(data.data) // data.data adalah List<Product>
+                    Log.d("API_SUCCESS", data.toString())
+                    onSuccess(data.data)
                 } else {
                     onError("Response body is null")
                 }

@@ -26,16 +26,16 @@ fun CartItemCard(item: CartItem) {
             .padding(16.dp)
     ) {
         AsyncImage(
-            model = BASE_URL + item.image,
+            model = "http://10.0.2.2:8000/${item.image}",
             contentDescription = item.name,
             modifier = Modifier
+                .size(100.dp)
                 .clip(MaterialTheme.shapes.medium)
-                .height(100.dp)
         )
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(start = 16.dp)
+                .fillMaxHeight()
                 .weight(1f)
         ) {
             Text(text = item.name, style = MaterialTheme.typography.bodyLarge)
