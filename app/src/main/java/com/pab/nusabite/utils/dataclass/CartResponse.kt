@@ -1,5 +1,7 @@
 package com.pab.nusabite.utils.dataclass
 
+import com.google.gson.annotations.SerializedName
+
 data class CartResponse(
     val code: Int,
     val message: String,
@@ -10,3 +12,4 @@ data class CartData(
     val id: Int,
     val products: List<CartItem>
 )
+

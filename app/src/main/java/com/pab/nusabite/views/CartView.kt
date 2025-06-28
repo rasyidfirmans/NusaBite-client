@@ -22,6 +22,7 @@ fun CartView(
     val cartItems by viewModel.cartProducts.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val cartIdReady = viewModel.getCartId() != null
 
     Log.d("CartView", "Cart items count: ${cartItems.size}")
     Log.d("CART_ITEMS_DATA", "Cart items: $cartItems")
@@ -51,8 +52,15 @@ fun CartView(
                         .padding(bottom = 8.dp)
                 ) {
                     items(cartItems) { item ->
-                        CartItemCard(item = item)
+                        CartItemCard(
+                            item = item,
+                            cartId = viewModel.getCartId(),
+                            onDelete = {
+                                viewModel.removeItemFromCart(item.productId)
+                            }
+                        )
                     }
+
                 }
 
                 PaymentSummary(cartItems)

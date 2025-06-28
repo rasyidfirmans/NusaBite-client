@@ -8,6 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -49,6 +50,46 @@ fun addToCart(addToCartBody: AddToCartBody, onSuccess: (CartResponse) -> Unit, o
         }
     })
 }
+
+data class DeleteCartItemBody (
+    @SerializedName("cart_id") val cartId: Int,
+    @SerializedName("product_id") val productId: Int,
+)
+interface DeleteCartItemService {
+    @HTTP(method = "DELETE", path = "cart", hasBody = true)
+    @Headers("Accept: application/json",
+        "Content-Type: application/json")
+    fun deleteCartItem(
+        @Body deleteCartItemBody: DeleteCartItemBody
+    ): Call<CartResponse>
+}
+
+val deleteCartItemService = retrofit.create(DeleteCartItemService::class.java)
+
+fun deleteCartItem(
+    deleteCartItemBody: DeleteCartItemBody,
+    onSuccess: (CartResponse) -> Unit,
+    onError: (String) -> Unit
+) {
+    deleteCartItemService.deleteCartItem(deleteCartItemBody)
+        .enqueue(object : Callback<CartResponse> {
+            override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { onSuccess(it) } ?: onError("Empty body")
+                    Log.d("DELETE_CART_SUCCESS", response.body().toString())
+                } else {
+                    onError("Error: ${response.code()}")
+                    Log.e("DELETE_CART_ERROR", response.errorBody()?.string() ?: "Unknown error")
+                }
+            }
+
+            override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                onError("Failure: ${t.message}")
+                Log.e("DELETE_CART_FAILURE", t.message ?: "Unknown failure")
+            }
+        })
+}
+
 
 fun getAllCartItems(onSuccess: (CartResponse) -> Unit, onError: (String) -> Unit) {
     val service = retrofit.create(GetAllCartItemsService::class.java)
