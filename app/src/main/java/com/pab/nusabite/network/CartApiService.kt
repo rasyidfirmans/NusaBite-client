@@ -7,10 +7,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 data class AddToCartBody(
     @SerializedName("cart_id") val cartId: Int,
@@ -107,3 +109,38 @@ fun getAllCartItems(onSuccess: (CartResponse) -> Unit, onError: (String) -> Unit
         }
     })
 }
+
+interface ClearCartService {
+    @DELETE("cart/{id}")
+    @Headers("Accept: application/json")
+    fun clearCart(@Path("id") cartId: Int): Call<CartResponse>
+}
+
+
+val clearCartService = retrofit.create(ClearCartService::class.java)
+
+fun clearCart(
+    cartId: Int,
+    onSuccess: (CartResponse) -> Unit,
+    onError: (String) -> Unit
+) {
+    val service = retrofit.create(ClearCartService::class.java)
+    service.clearCart(cartId).enqueue(object : Callback<CartResponse> {
+        override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    onSuccess(it)
+                } ?: onError("Empty body")
+            } else {
+                onError("Error: ${response.code()} - ${response.errorBody()?.string()}")
+            }
+        }
+
+        override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+            onError("Failure: ${t.message}")
+        }
+    })
+}
+
+
+

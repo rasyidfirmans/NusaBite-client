@@ -3,6 +3,7 @@ package com.pab.nusabite.utils.models
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.pab.nusabite.network.DeleteCartItemBody
+import com.pab.nusabite.network.clearCart
 import com.pab.nusabite.network.deleteCartItem
 import com.pab.nusabite.network.getAllCartItems
 import com.pab.nusabite.utils.dataclass.CartItem
@@ -78,24 +79,42 @@ class CartViewModel : ViewModel() {
         )
     }
 
-//    fun removeItemFromCart(cartId: Int, productId: Int) {
-//        _isLoading.value = true
-//        val body = DeleteCartItemBody(cartId, productId)
-//
-//        deleteCartItem(
-//            body,
-//            onSuccess = { response ->
-//                val updatedCart = _cartProducts.value.filterNot {
-//                    it.cartId == cartId && it.productId == productId
-//                }
-//                _cartProducts.value = updatedCart
-//                _isLoading.value = false
-//            },
-//            onError = { error ->
-//                _errorMessage.value = error
-//                _isLoading.value = false
-//            }
-//        )
-//    }
+    fun clearAllCartItems() {
+        val currentCartId = cartId
+        if (currentCartId == null) {
+            _errorMessage.value = "Cart ID tidak ditemukan"
+            return
+        }
+
+        clearCart(
+            cartId = currentCartId,
+            onSuccess = {
+                _cartProducts.value = emptyList() // clear list di UI
+            },
+            onError = { error ->
+                _errorMessage.value = error
+            }
+        )
+    }
+
+    fun checkoutCart() {
+        val currentCartId = cartId
+        if (currentCartId == null) {
+            _errorMessage.value = "Cart ID tidak ditemukan"
+            return
+        }
+
+        clearCart(
+            cartId = currentCartId,
+            onSuccess = {
+                _cartProducts.value = emptyList()
+                Log.d("CHECKOUT", "Checkout berhasil, cart dikosongkan")
+            },
+            onError = { error ->
+                _errorMessage.value = error
+                Log.e("CHECKOUT", "Gagal checkout: $error")
+            }
+        )
+    }
 
 }

@@ -22,6 +22,7 @@ import java.util.Locale
 
 @Composable
 fun CartItemCard(item: CartItem, cartId: Int?, onDelete: () -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
