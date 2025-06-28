@@ -27,6 +27,10 @@ fun CartView(
     val errorMessage by viewModel.errorMessage.collectAsState()
     val cartIdReady = viewModel.getCartId() != null
     var showClearDialog by remember { mutableStateOf(false) }
+    var itemToDelete by remember { mutableStateOf<Int?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+
 
 
     Log.d("CartView", "Cart items count: ${cartItems.size}")
@@ -83,9 +87,11 @@ fun CartView(
                             item = item,
                             cartId = viewModel.getCartId(),
                             onDelete = {
-                                viewModel.removeItemFromCart(item.productId)
+                                itemToDelete = item.productId
+                                showDeleteDialog = true
                             }
                         )
+
                     }
 
                 }
@@ -123,6 +129,37 @@ fun CartView(
             },
             dismissButton = {
                 TextButton(onClick = { showClearDialog = false }) {
+                    Text("Batal")
+                }
+            }
+        )
+    }
+    if (showDeleteDialog && itemToDelete != null) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+                itemToDelete = null
+            },
+            title = { Text("Konfirmasi Hapus Item") },
+            text = { Text("Apakah kamu yakin ingin menghapus item ini dari keranjang?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.removeItemFromCart(itemToDelete!!)
+                        showDeleteDialog = false
+                        itemToDelete = null
+                    }
+                ) {
+                    Text("Ya", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        itemToDelete = null
+                    }
+                ) {
                     Text("Batal")
                 }
             }
