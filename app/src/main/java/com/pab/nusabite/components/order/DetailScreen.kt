@@ -1,15 +1,8 @@
-package com.pab.nusabite.ui
+package com.pab.nusabite.components.order
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,39 +10,37 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.pab.nusabite.network.addToCart
 import com.pab.nusabite.utils.models.MenuViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pab.nusabite.network.AddToCartBody
+
 
 @Composable
-fun DetailScreen(
-    menuId: Int,
-    navController: NavController,
-    viewModel: MenuViewModel
-) {
+fun DetailScreen(menuId: Int, navController: NavController, viewModel: MenuViewModel = viewModel()) {
+    val context = LocalContext.current
     val menus by viewModel.menus.collectAsState()
     val menu = menus.find { it.id == menuId }
     var quantity by remember { mutableStateOf(1) }
+    var addSuccess by remember { mutableStateOf(false) }
+
+    val addToCartBody: AddToCartBody = AddToCartBody(
+        cartId = 1,
+        productId = menuId,
+        quantity = quantity
+    )
 
     menu?.let {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -60,8 +51,8 @@ fun DetailScreen(
                     .padding(bottom = 90.dp)
             ) {
                 Box(modifier = Modifier.height(300.dp)) {
-                    Image(
-                        painter = painterResource(id = it.imageResId),
+                    AsyncImage(
+                        model = "http://10.0.2.2:8000/${it.image}",
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -69,12 +60,15 @@ fun DetailScreen(
                             .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
                     )
 
-                IconButton(
+                    IconButton(
                         onClick = { navController.popBackStack() },
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.TopStart)
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f), RoundedCornerShape(50))
+                            .background(
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
+                                RoundedCornerShape(50)
+                            )
                     ) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
                     }
@@ -85,7 +79,6 @@ fun DetailScreen(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(16.dp)
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
 
@@ -101,30 +94,25 @@ fun DetailScreen(
 
                     Text(
                         text = "Rp${it.price}",
-                        style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFFFFA500), fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = Color(0xFFFFA500),
+                            fontWeight = FontWeight.Bold
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-
                     Divider()
-
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
                         text = "Description",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold)
                     )
-
                     Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
-                        text = it.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Text(text = it.description, style = MaterialTheme.typography.bodyMedium)
                 }
             }
 
-            // Tombol bawah
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -151,11 +139,28 @@ fun DetailScreen(
 
                 Button(
                     onClick = {
+                        addToCart(
+                            addToCartBody,
+                            onSuccess = {
+                                addSuccess = true
+                            },
+                            onError = { error ->
+                                Toast.makeText(context, "Gagal: $error", Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500)),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text("Add to Cart")
+                }
+            }
+
+            // ✅ Trigger navigasi & toast hanya sekali
+            if (addSuccess) {
+                LaunchedEffect(Unit) {
+                    Toast.makeText(context, "Berhasil ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
+                    navController.navigate("cart")
                 }
             }
         }

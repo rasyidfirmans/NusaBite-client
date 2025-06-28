@@ -17,9 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pab.nusabite.utils.dataclass.CartItem
 
 @Composable
-fun PaymentSummary() {
+fun PaymentSummary(cartItems: List<CartItem>) {
+    val totalPrice = cartItems.sumOf { it.price * it.quantity }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,13 +41,13 @@ fun PaymentSummary() {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            Text (
+            Text(
                 text = "Total Items",
                 color = Color.Gray,
                 modifier = Modifier.weight(1f)
             )
-            Text (
-                text = "10.000.000",
+            Text(
+                text = cartItems.sumOf { it.quantity }.toString()
             )
         }
         Row (
@@ -52,13 +55,13 @@ fun PaymentSummary() {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            Text (
+            Text(
                 text = "Delivery Fee",
                 color = Color.Gray,
                 modifier = Modifier.weight(1f)
             )
-            Text (
-                text = "Free",
+            Text(
+                text = "Free"
             )
         }
         Row (
@@ -66,13 +69,13 @@ fun PaymentSummary() {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            Text (
+            Text(
                 text = "Discount",
                 color = Color.Gray,
                 modifier = Modifier.weight(1f)
             )
-            Text (
-                text = "0.00",
+            Text(
+                text = "0.00"
             )
         }
         Row (
@@ -80,20 +83,15 @@ fun PaymentSummary() {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            Text (
+            Text(
                 text = "Total Payment",
                 color = Color.Gray,
                 modifier = Modifier.weight(1f)
             )
-            Text (
-                text = "10.000.000",
+            Text(
+                text = "Rp ${"%,.2f".format(totalPrice)}"
             )
         }
     }
 }
 
-@Preview (showBackground = true)
-@Composable
-fun PaymentSummaryPreview() {
-    PaymentSummary()
-}

@@ -19,33 +19,30 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun CategoryItemStyled(
-    category: String,
+    name: String,
     iconRes: Int,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(
-                if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                else Color.Transparent
-            )
+            .background(if (isSelected) Color(0xFFE0ECF8) else Color.Transparent)
             .clickable { onClick() }
-            .padding(8.dp),
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = iconRes),
-            contentDescription = category,
-            modifier = Modifier.size(40.dp)
+            contentDescription = name,
+            modifier = Modifier.size(36.dp)
         )
-        Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = category,
-            fontSize = 12.sp,
+            text = name,
+            fontSize = 14.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+            color = if (isSelected) Color(0xFF3B82F6) else Color.Black
         )
     }
 }
