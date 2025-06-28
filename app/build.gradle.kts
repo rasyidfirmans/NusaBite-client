@@ -83,6 +83,7 @@ dependencies {
 
     // Hilt (DI)
     implementation("com.google.dagger:hilt-android:2.56.2")
+    implementation(libs.androidx.foundation.android)
     kapt("com.google.dagger:hilt-compiler:2.56.2")
 
     // ⚠️ Firebase appdistribution biasanya tidak perlu di sini

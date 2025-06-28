@@ -51,7 +51,11 @@ fun CartView(
                         .padding(bottom = 8.dp)
                 ) {
                     items(cartItems) { item ->
-                        CartItemCard(item = item)
+                        CartItemCard(
+                            item = item,
+                            onIncrement = { viewModel.incrementQuantity(item.id, item.quantity) },
+                            onDecrement = { viewModel.decrementQuantity(item.id, item.quantity) }
+                        )
                     }
                 }
 
