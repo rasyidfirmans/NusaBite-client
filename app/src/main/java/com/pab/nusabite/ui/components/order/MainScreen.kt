@@ -123,7 +123,7 @@ fun MainScreen(
         }
 
         // Menu Items Grid
-        val productList = products.data ?: emptyList()
+        val productList = products.data
         items(productList) { menu: Product ->
             MenuCardStyled(menu = menu) {
                 navController.navigate("detail/${menu.id}")

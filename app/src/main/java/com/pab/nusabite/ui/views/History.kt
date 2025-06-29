@@ -1,90 +1,83 @@
 package com.pab.nusabite.ui.views
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
-import com.pab.nusabite.ui.components.HeaderView
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pab.nusabite.data.remote.ApiResult
 import com.pab.nusabite.ui.components.history.History
+import com.pab.nusabite.ui.views.history.TransactionViewModel
 
 // Dummy colors
 val Orange = Color(0xFFFFE8C00)
 val ijo = Color(0xFF4CAF50)
 
-// Data model
-data class Order(
-    val id: Int,
-    val date: String,
-    val time: String,
-    val items: List<OrderItem>,
-    val total: String,
-    val status: OrderStatus
-)
-
-data class OrderItem(
-    val name: String,
-    val qty: Int,
-    val price: String
-)
-
 enum class OrderStatus { process, complete }
-
-val orders = listOf(
-    Order(1, "20 Mei 2025", "19:30",
-        listOf(
-            OrderItem("Nasi Goreng", 1, "15.000"),
-            OrderItem("Es Teh", 2, "5.000")
-        ),
-        "25.000",
-        OrderStatus.complete
-    ),
-    Order(2, "21 Mei 2025", "21:30",
-        listOf(
-            OrderItem("Nasi Goreng", 1, "15.000"),
-            OrderItem("Es Teh", 2, "5.000")
-        ),
-        "25.000",
-        OrderStatus.process
-    ),
-    Order(3, "21 Mei 2025", "22:30",
-        listOf(
-            OrderItem("Nasi Goreng", 1, "15.000")
-        ),
-        "15.000",
-        OrderStatus.process
-    ),
-    Order(4, "21 Mei 2025", "22:30",
-        listOf(
-            OrderItem("Nasi Goreng", 1, "15.000")
-        ),
-        "15.000",
-        OrderStatus.process
-    )
-)
 
 // Entry point
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryView( ) {
-    Column(
-        modifier = androidx.compose.ui.Modifier.fillMaxSize()
-    ) {
-        HeaderView(viewName = "Order History")
-        History(orders)
-    }
-}
+fun HistoryView(transactionViewModel: TransactionViewModel = viewModel()) {
+    val transactionState by transactionViewModel.transactionHistoryResult.collectAsState()
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewHistoryScreen() {
-    HistoryView()
+    LaunchedEffect(Unit) {
+        transactionViewModel.fetchTransactionHistory()
+    }
+
+    when (transactionState) {
+        is ApiResult.Loading -> {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+        is ApiResult.Error -> {
+            Text(
+                text = "Error: ${(transactionState as ApiResult.Error).exception.message}",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        is ApiResult.Success -> {
+            val orders = (transactionState as ApiResult.Success).data
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                History(orders.data)
+            }
+        }
+        else -> {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+    }
 }

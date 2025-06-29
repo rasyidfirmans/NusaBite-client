@@ -9,8 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRightAlt
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,7 +45,7 @@ fun LogoutButton(modifier: Modifier = Modifier) {
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Default.Logout,
+            imageVector = Icons.AutoMirrored.Filled.Logout,
             contentDescription = "Logout Icon",
             tint = if (interactionSource.collectIsPressedAsState().value) Color.White else Color.Red,
         )

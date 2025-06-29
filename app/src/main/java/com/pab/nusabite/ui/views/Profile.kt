@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
 import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,9 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pab.nusabite.R
+import com.pab.nusabite.data.model.ProfileMenu
 import com.pab.nusabite.ui.components.LogoutButton
 import com.pab.nusabite.ui.components.ProfileMenuItem
-import com.pab.nusabite.utils.dataclass.ProfileMenu
 
 val ProfileMenuList = listOf(
     ProfileMenu(
@@ -85,10 +86,10 @@ fun Profile(modifier: Modifier = Modifier) {
             color = Color.Gray,
         )
         Spacer(modifier = Modifier.height(8.dp))
-        androidx.compose.material3.Divider(
-            color = Color.Gray,
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 16.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(vertical = 16.dp)
+            color = Color.Gray
         )
 
         // Profile Menu Section
@@ -100,7 +101,7 @@ fun Profile(modifier: Modifier = Modifier) {
                 color = Color.Gray,
                 textAlign = TextAlign.Start
             )
-            ProfileMenuList.forEach() { menu ->
+            ProfileMenuList.forEach { menu ->
                 ProfileMenuItem(
                     menuName = menu.name,
                     menuIcon = menu.icon
@@ -118,7 +119,7 @@ fun Profile(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(top = 16.dp)
             )
-            SupportMenuList.forEach() { menu ->
+            SupportMenuList.forEach { menu ->
                 ProfileMenuItem(
                     menuName = menu.name,
                     menuIcon = menu.icon

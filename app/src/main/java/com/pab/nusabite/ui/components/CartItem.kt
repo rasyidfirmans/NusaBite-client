@@ -1,11 +1,8 @@
 package com.pab.nusabite.ui.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,17 +17,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pab.nusabite.R
-import com.pab.nusabite.utils.dataclass.CartItem
+import coil.compose.AsyncImage
+import com.pab.nusabite.data.model.CartProduct
+import com.pab.nusabite.ui.views.cart.CartViewModel
+import com.pab.nusabite.utils.BASE_URL
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun CartItem(item: CartItem) {
+fun CartItem(
+    item: CartProduct,
+    cartViewModel: CartViewModel
+) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -39,11 +40,13 @@ fun CartItem(item: CartItem) {
             .clickable { /* Handle item click */ }
             .padding(horizontal = 16.dp, vertical = 16.dp),
     ) {
-        Image(
-            painter = painterResource(item.image),
+        AsyncImage(
+            model = "${BASE_URL}${item.image}",
             contentDescription = item.name,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .clip(shape = MaterialTheme.shapes.medium)
+                .weight(0.5f)
         )
         Column (
             modifier = Modifier
@@ -57,7 +60,7 @@ fun CartItem(item: CartItem) {
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = NumberFormat.getCurrencyInstance(Locale("id", "ID")).format(item.price),
+                text = NumberFormat.getCurrencyInstance(Locale("id", "ID")).format(item.price.toDouble()),
                 fontWeight = FontWeight.Bold,
                 color = Color(254, 140, 0),
                 modifier = Modifier
@@ -67,6 +70,8 @@ fun CartItem(item: CartItem) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Counter(
+                    item = item,
+                    cartViewModel = cartViewModel,
                     modifier = Modifier
                         .weight(1f)
                 )
@@ -77,23 +82,12 @@ fun CartItem(item: CartItem) {
                     modifier = Modifier
                         .clip(CircleShape)
 //                        .background(color = Color(230 / 255f, 230 / 255f, 230 / 255f, 0.7f))
-                        .clickable { /* Handle delete action */ }
+                        .clickable {
+                            cartViewModel.deleteItemFromCart(1, item.id)
+                        }
                         .padding(8.dp)
                 )
             }
         }
     }
-}
-
-@Preview (showBackground = true)
-@Composable
-fun CartItemPreview() {
-    CartItem(
-        item = CartItem(
-            name = "Burger With Meat",
-            price = 15000.0,
-            quantity = 2,
-            image = R.drawable.lumpia
-        )
-    )
 }

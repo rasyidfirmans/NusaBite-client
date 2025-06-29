@@ -1,8 +1,8 @@
-package com.pab.nusabite.utils.dataclass
+package com.pab.nusabite.data.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class ProfileMenu(
     val name: String,
-    val icon: ImageVector,
+    val icon: ImageVector
 )

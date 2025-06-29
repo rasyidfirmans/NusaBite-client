@@ -1,6 +1,7 @@
 package com.pab.nusabite
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -48,6 +50,8 @@ import com.pab.nusabite.ui.views.CartView
 import com.pab.nusabite.ui.views.HistoryView
 import com.pab.nusabite.ui.views.OrderView
 import com.pab.nusabite.ui.views.Profile
+import com.pab.nusabite.ui.views.cart.CartViewModel
+import com.pab.nusabite.ui.views.history.TransactionViewModel
 
 val navigationItems = listOf(
     Navigation(title = "Order", route = ORDER, icon = arrayOf(Icons.Outlined.Shop, Icons.Filled.Shop)),
@@ -67,6 +71,8 @@ class MainActivity : ComponentActivity() {
                             mutableIntStateOf(0)
                         }
                         val navController = rememberNavController()
+                        val cartViewModel: CartViewModel = viewModel()
+                        val transactionViewModel: TransactionViewModel = viewModel()
 
                         val lifecycleOwner = LocalLifecycleOwner.current
                         val currentDestination = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
@@ -135,13 +141,13 @@ class MainActivity : ComponentActivity() {
                                     Profile()
                                 }
                                 composable(route = ORDER) {
-                                    OrderView()
+                                    OrderView(cartViewModel = cartViewModel, transactionViewModel =  transactionViewModel, navController = navController)
                                 }
                                 composable(route = CART) {
-                                    CartView()
+                                    CartView(cartViewModel = cartViewModel, transactionViewModel = transactionViewModel, navController)
                                 }
                                 composable(route = HISTORY) {
-                                    HistoryView()
+                                    HistoryView(transactionViewModel = transactionViewModel)
                                 }
                             }
                         }

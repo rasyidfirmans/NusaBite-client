@@ -13,17 +13,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,8 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.pab.nusabite.data.model.CartRequest
 import com.pab.nusabite.data.model.ProductsResponse
 import com.pab.nusabite.data.remote.ApiResult
+import com.pab.nusabite.ui.views.cart.CartViewModel
 import com.pab.nusabite.ui.views.home.ProductViewModel
 import com.pab.nusabite.utils.BASE_URL
 
@@ -47,9 +50,20 @@ import com.pab.nusabite.utils.BASE_URL
 fun DetailScreen(
     menuId: Int,
     navController: NavController,
-    viewModel: ProductViewModel
+    viewModel: ProductViewModel,
+    cartViewModel: CartViewModel,
+    onAddToCartSuccess: () -> Unit
 ) {
     val productsState by viewModel.products.collectAsState()
+    val addToCartResult by cartViewModel.addToCartResult.collectAsState()
+
+    LaunchedEffect(addToCartResult) {
+        if (addToCartResult is ApiResult.Success) {
+            navController.popBackStack()
+            onAddToCartSuccess()
+            cartViewModel.resetAddToCartResult()
+        }
+    }
 
     when (productsState) {
         is ApiResult.Success -> {
@@ -81,7 +95,7 @@ fun DetailScreen(
                                     .align(Alignment.TopStart)
                                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f), RoundedCornerShape(50))
                             ) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
                             }
 
                             Text(
@@ -111,7 +125,7 @@ fun DetailScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            Divider()
+                            HorizontalDivider()
 
                             Spacer(modifier = Modifier.height(12.dp))
 
@@ -156,6 +170,12 @@ fun DetailScreen(
 
                         Button(
                             onClick = {
+                                val cartRequest = CartRequest(
+                                    cartId = 1,
+                                    productId = it.id,
+                                    quantity = quantity
+                                )
+                                cartViewModel.addToCart(cartRequest)
                             },
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500)),
                             shape = RoundedCornerShape(16.dp)

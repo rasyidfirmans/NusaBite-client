@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -13,19 +12,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pab.nusabite.data.model.CartProduct
+import com.pab.nusabite.data.model.CartRequest
+import com.pab.nusabite.ui.views.cart.CartViewModel
 
 @Composable
-fun Counter(modifier: Modifier = Modifier) {
-    val count = remember { mutableStateOf(1) }
-    Row (
+fun Counter(
+    item: CartProduct,
+    cartViewModel: CartViewModel,
+    modifier: Modifier = Modifier
+) {
+    Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
@@ -36,14 +38,14 @@ fun Counter(modifier: Modifier = Modifier) {
                 .clip(CircleShape)
                 .background(color = Color(230 / 255f, 230 / 255f, 230 / 255f, 0.7f))
                 .clickable {
-                    if (count.value > 1) {
-                        count.value -= 1
+                    if (item.quantity > 1) {
+                        cartViewModel.updateQuantity(1, CartRequest(cartId = 1, item.id, item.quantity - 1))
                     }
                 }
                 .padding(4.dp)
         )
-        Text (
-            text = count.value.toString(),
+        Text(
+            text = item.quantity.toString(),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
@@ -54,15 +56,9 @@ fun Counter(modifier: Modifier = Modifier) {
                 .clip(CircleShape)
                 .background(color = Color(230 / 255f, 230 / 255f, 230 / 255f, 0.7f))
                 .clickable {
-                    count.value += 1
+                    cartViewModel.updateQuantity(1, CartRequest(cartId = 1, item.id, item.quantity + 1))
                 }
                 .padding(4.dp)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CounterPreview() {
-    Counter()
 }

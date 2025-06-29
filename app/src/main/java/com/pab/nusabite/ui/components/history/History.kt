@@ -7,16 +7,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pab.nusabite.ui.views.Order
-import com.pab.nusabite.ui.views.OrderItem
+import com.pab.nusabite.data.model.TransactionData
+import com.pab.nusabite.data.model.TransactionResponse
 import com.pab.nusabite.ui.views.OrderStatus
 
 @Composable
-fun History(orders: List<Order>){
-    val ongoing = orders.filter { it.status == OrderStatus.process }
-    val completed = orders.filter { it.status == OrderStatus.complete }
+fun History(orders: List<TransactionData>){
+    val ongoing = orders.filter { !it.status.equals("Completed", ignoreCase = true) }
+    val completed = orders.filter { it.status.equals("Completed", ignoreCase = true) }
 
     LazyColumn(
         modifier = Modifier
@@ -34,28 +33,4 @@ fun History(orders: List<Order>){
             items(completed) { CardOrder(order = it) }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewHistoryContent() {
-    val sampleOrders = listOf(
-        Order(
-            id = 1,
-            date = "21 Mei 2025",
-            time = "19:30",
-            items = listOf(OrderItem("Nasi Goreng", 1, "15.000")),
-            total = "15.000",
-            status = OrderStatus.process
-        ),
-        Order(
-            id = 2,
-            date = "20 Mei 2025",
-            time = "13:00",
-            items = listOf(OrderItem("Ayam Bakar", 1, "20.000")),
-            total = "20.000",
-            status = OrderStatus.complete
-        )
-    )
-    History(sampleOrders)
 }
