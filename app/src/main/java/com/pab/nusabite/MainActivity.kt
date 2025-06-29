@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,9 +24,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -41,16 +39,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pab.nusabite.ui.theme.NusaBiteTheme
-import com.pab.nusabite.utils.dataclass.Navigation
+import com.pab.nusabite.data.model.Navigation
 import com.pab.nusabite.utils.route.Route.CART
 import com.pab.nusabite.utils.route.Route.HISTORY
 import com.pab.nusabite.utils.route.Route.ORDER
 import com.pab.nusabite.utils.route.Route.PROFILE
-import com.pab.nusabite.views.CartView
-import com.pab.nusabite.views.HistoryView
-import com.pab.nusabite.views.OrderView
-import com.pab.nusabite.views.Profile
-import com.pab.nusabite.views.orders
+import com.pab.nusabite.ui.views.CartView
+import com.pab.nusabite.ui.views.HistoryView
+import com.pab.nusabite.ui.views.OrderView
+import com.pab.nusabite.ui.views.Profile
 
 val navigationItems = listOf(
     Navigation(title = "Order", route = ORDER, icon = arrayOf(Icons.Outlined.Shop, Icons.Filled.Shop)),
@@ -67,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 setContent {
                     NusaBiteTheme {
                         var selectedNavItemIndex by remember {
-                            mutableStateOf(0)
+                            mutableIntStateOf(0)
                         }
                         val navController = rememberNavController()
 
@@ -150,16 +147,5 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-    }
-}
-
-@Composable
-fun Screen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Profile(modifier = Modifier.fillMaxSize())
     }
 }
