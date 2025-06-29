@@ -11,24 +11,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,27 +37,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.pab.nusabite.R
-import com.pab.nusabite.components.order.CategoryItemStyled
-import com.pab.nusabite.utils.dataclass.MenuItem
-import com.pab.nusabite.utils.models.MenuViewModel
+import com.pab.nusabite.data.model.Product
+import com.pab.nusabite.data.model.ProductsResponse
+import com.pab.nusabite.ui.components.order.CategoryRow
+import com.pab.nusabite.ui.views.home.ProductViewModel
+import com.pab.nusabite.utils.BASE_URL
 
 @Composable
-fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
-    val menuItems by viewModel.menus.collectAsState()
-
+fun MainScreen(
+    navController: NavController,
+    products: ProductsResponse,
+    selectedCategory: String,
+    onCategorySelected: (String) -> Unit
+) {
     val categories = listOf(
-        "Makanan" to R.drawable.icons_food,
-        "Minuman" to R.drawable.icons_lemonade,
-        "Dessert" to R.drawable.icons_strawberrycheesecake,
-        "Snack" to R.drawable.icons_frenchfries,
-        "Daging" to R.drawable.icons_steak,
-        "Ikan" to R.drawable.icons_fishfood,
-        "Sayur" to R.drawable.icons_broccoli,
-        "Ayam" to R.drawable.icons_chicken
+        "Makanan",
+        "Minuman",
     )
-
-    var selectedCategory by remember { mutableStateOf("Makanan") }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -105,7 +97,6 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
             }
         }
 
-        // Category Title
         item(span = { GridItemSpan(maxCurrentLineSpan) }) {
             Row(
                 modifier = Modifier
@@ -119,35 +110,21 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp
                 )
-                Text(
-                    text = "See All",
-                    color = Color(0xFFFFA500),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp
-                )
             }
         }
 
         // Category List
         item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 5.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(categories) { (name, iconRes) ->
-                    CategoryItemStyled(
-                        category = name,
-                        iconRes = iconRes,
-                        isSelected = selectedCategory == name,
-                        onClick = { selectedCategory = name }
-                    )
-                }
-            }
+            CategoryRow(
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onCategoryClick = onCategorySelected
+            )
         }
 
         // Menu Items Grid
-        items(menuItems) { menu ->
+        val productList = products.data ?: emptyList()
+        items(productList) { menu: Product ->
             MenuCardStyled(menu = menu) {
                 navController.navigate("detail/${menu.id}")
             }
@@ -155,9 +132,8 @@ fun MainScreen(navController: NavController, viewModel: MenuViewModel) {
     }
 }
 
-// Card untuk item menu
 @Composable
-fun MenuCardStyled(menu: MenuItem, onClick: () -> Unit) {
+fun MenuCardStyled(menu: Product, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,17 +142,18 @@ fun MenuCardStyled(menu: MenuItem, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
-            Image(
-                painter = painterResource(id = menu.imageResId),
-                contentDescription = null,
+            AsyncImage(
+                model = "${BASE_URL}${menu.image}",
+                contentDescription = menu.name,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
-                contentScale = ContentScale.Crop
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             )
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(text = menu.name, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                Text(text = "⭐ ${menu.rating}", fontSize = 12.sp, color = Color.Gray)
+//                Text(text = "⭐ ${menu.rating}", fontSize = 12.sp, color = Color.Gray)
                 Text(
                     text = "₱ ${menu.price}",
                     color = Color(0xFFFFA500),

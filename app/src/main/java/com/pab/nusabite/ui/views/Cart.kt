@@ -1,4 +1,4 @@
-package com.pab.nusabite.views
+package com.pab.nusabite.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.pab.nusabite.R
-import com.pab.nusabite.components.CartItem
-import com.pab.nusabite.components.HeaderView
-import com.pab.nusabite.components.PaymentSummary
+import com.pab.nusabite.ui.components.CartItem
+import com.pab.nusabite.ui.components.HeaderView
+import com.pab.nusabite.ui.components.PaymentSummary
 import com.pab.nusabite.utils.dataclass.CartItem
 
 val CartItems = listOf(

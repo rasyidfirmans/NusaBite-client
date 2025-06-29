@@ -1,4 +1,4 @@
-package com.pab.nusabite.components.history
+package com.pab.nusabite.ui.components.history
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

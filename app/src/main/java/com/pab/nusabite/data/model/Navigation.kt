@@ -1,4 +1,4 @@
-package com.pab.nusabite.utils.dataclass
+package com.pab.nusabite.data.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

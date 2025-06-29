@@ -1,4 +1,4 @@
-package com.pab.nusabite.views
+package com.pab.nusabite.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pab.nusabite.R
-import com.pab.nusabite.components.LogoutButton
-import com.pab.nusabite.components.ProfileMenuItem
+import com.pab.nusabite.ui.components.LogoutButton
+import com.pab.nusabite.ui.components.ProfileMenuItem
 import com.pab.nusabite.utils.dataclass.ProfileMenu
 
 val ProfileMenuList = listOf(

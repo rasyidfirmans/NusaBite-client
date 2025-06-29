@@ -1,4 +1,4 @@
-package com.pab.nusabite.views
+package com.pab.nusabite.ui.views
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
-import com.pab.nusabite.components.HeaderView
-import com.pab.nusabite.components.history.History
+import com.pab.nusabite.ui.components.HeaderView
+import com.pab.nusabite.ui.components.history.History
 
 // Dummy colors
 val Orange = Color(0xFFFFE8C00)

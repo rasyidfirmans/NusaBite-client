@@ -1,4 +1,4 @@
-package com.pab.nusabite.components
+package com.pab.nusabite.ui.components
 
 import android.widget.RemoteViews.RemoteView
 import androidx.compose.foundation.background

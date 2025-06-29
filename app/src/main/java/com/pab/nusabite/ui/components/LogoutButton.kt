@@ -1,4 +1,4 @@
-package com.pab.nusabite.components
+package com.pab.nusabite.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

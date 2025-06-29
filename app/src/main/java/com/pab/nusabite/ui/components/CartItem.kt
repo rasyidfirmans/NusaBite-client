@@ -1,4 +1,4 @@
-package com.pab.nusabite.components
+package com.pab.nusabite.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pab.nusabite.R
 import com.pab.nusabite.utils.dataclass.CartItem
 import java.text.NumberFormat
 import java.util.Locale
@@ -92,7 +93,7 @@ fun CartItemPreview() {
             name = "Burger With Meat",
             price = 15000.0,
             quantity = 2,
-            image = com.pab.nusabite.R.drawable.lumpia
+            image = R.drawable.lumpia
         )
     )
 }

@@ -1,8 +1,8 @@
-package com.pab.nusabite.components.history
+package com.pab.nusabite.ui.components.history
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.pab.nusabite.views.OrderStatus
+import com.pab.nusabite.ui.views.OrderStatus
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
